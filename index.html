@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Umut Şimşek — IB Manager & Business Development</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0D1B2A;
+  --navy2: #112236;
+  --navy3: #162B40;
+  --navy4: #1C3350;
+  --blue: #1F6FEB;
+  --blue-light: #58A6FF;
+  --red: #E8344A;
+  --red-light: #FF6B7A;
+  --red-dim: rgba(232,52,74,0.15);
+  --text: #E6EDF3;
+  --text-muted: #8B949E;
+  --text-dim: #4A5568;
+  --border: rgba(255,255,255,0.07);
+  --border-blue: rgba(31,111,235,0.25);
+  --border-red: rgba(232,52,74,0.3);
+  --gold: #F0A500;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--navy);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* TRADING CHART CANVAS */
+#chart-bg {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 18px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(13,27,42,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--text);
+  letter-spacing: -0.5px;
+}
+.nav-logo span { color: var(--red); }
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--text); }
+
+.nav-cta {
+  background: var(--red);
+  color: #fff;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 10px 22px;
+  text-decoration: none;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+}
+.nav-cta:hover { background: var(--red-light); transform: translateY(-1px); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 120px 48px 80px;
+  overflow: hidden;
+}
+
+.hero-glow {
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,52,74,0.06) 0%, transparent 70%);
+  top: -100px; right: -100px;
+  pointer-events: none;
+}
+
+.hero-glow2 {
+  position: absolute;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(31,111,235,0.07) 0%, transparent 70%);
+  bottom: 0; left: 0;
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 680px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border-red);
+  background: var(--red-dim);
+  padding: 5px 14px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--red-light);
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  margin-bottom: 28px;
+  animation: fadeUp 0.7s 0.1s both;
+}
+.hero-badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: var(--red);
+  border-radius: 50%;
+  animation: blink 1.5s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(38px, 5.5vw, 68px);
+  line-height: 1.0;
+  letter-spacing: -2px;
+  margin-bottom: 8px;
+  animation: fadeUp 0.7s 0.2s both;
+}
+
+.hero h1 .name-red { color: var(--red); }
+.hero h1 .name-blue { color: var(--blue-light); }
+
+.hero-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  animation: fadeUp 0.7s 0.3s both;
+}
+
+.hero p {
+  font-size: 17px;
+  color: var(--text-muted);
+  max-width: 520px;
+  margin-bottom: 40px;
+  line-height: 1.8;
+  animation: fadeUp 0.7s 0.4s both;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  flex-wrap: wrap;
+  animation: fadeUp 0.7s 0.5s both;
+}
+
+.btn-primary {
+  background: var(--red);
+  color: #fff;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 14px 32px;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: inline-block;
+}
+.btn-primary:hover { background: var(--red-light); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(232,52,74,0.3); }
+
+.btn-outline {
+  border: 1px solid var(--border-blue);
+  color: var(--blue-light);
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 13px 28px;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: inline-block;
+}
+.btn-outline:hover { background: rgba(31,111,235,0.08); border-color: var(--blue); }
+
+.hero-right {
+  position: absolute;
+  right: 48px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  animation: fadeLeft 0.7s 0.6s both;
+}
+
+.stat-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.stat-box {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--red);
+  padding: 18px 24px;
+  min-width: 180px;
+  transition: background 0.2s;
+}
+.stat-box:hover { background: rgba(255,255,255,0.05); }
+
+.stat-n {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 30px;
+  color: var(--red-light);
+  letter-spacing: -1px;
+  line-height: 1;
+}
+.stat-l { font-size: 11px; color: var(--text-dim); margin-top: 4px; letter-spacing: 0.5px; }
+
+/* LANGS STRIP */
+.langs-strip {
+  position: relative; z-index: 1;
+  background: var(--navy2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 48px;
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  overflow: hidden;
+}
+.lang-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+.lang-flag { font-size: 20px; }
+.lang-name { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); }
+.lang-level { font-size: 11px; color: var(--text-dim); }
+.langs-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--red);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  margin-right: 8px;
+  white-space: nowrap;
+}
+
+/* SECTIONS */
+section { position: relative; z-index: 1; }
+
+.section-inner {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 90px 48px;
+}
+
+.section-label {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--red);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(26px, 3.5vw, 44px);
+  letter-spacing: -1.5px;
+  line-height: 1.1;
+  margin-bottom: 14px;
+}
+
+.section-sub {
+  color: var(--text-muted);
+  font-size: 16px;
+  max-width: 540px;
+  line-height: 1.8;
+  margin-bottom: 56px;
+}
+
+/* ABOUT */
+.about { background: var(--navy2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+
+.about-text p {
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.9;
+  margin-bottom: 20px;
+}
+
+.about-text p strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.about-highlight {
+  border-left: 2px solid var(--red);
+  padding-left: 20px;
+  margin: 28px 0;
+  font-size: 15px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.skill-tag {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 12px;
+  padding: 5px 12px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: all 0.2s;
+}
+.skill-tag:hover { border-color: var(--border-red); color: var(--red-light); }
+
+.about-info { display: flex; flex-direction: column; gap: 20px; }
+
+.info-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  padding: 24px;
+  transition: border-color 0.2s;
+}
+.info-card:hover { border-color: var(--border-red); }
+
+.info-card h4 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--red-light);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.info-card p { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+
+/* EXPERIENCE */
+.exp-timeline { display: flex; flex-direction: column; gap: 3px; }
+
+.exp-item {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  padding: 32px 36px;
+  position: relative;
+  transition: all 0.25s;
+  overflow: hidden;
+}
+
+.exp-item::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--navy3);
+  transition: background 0.25s;
+}
+
+.exp-item:hover { background: rgba(255,255,255,0.04); border-color: rgba(232,52,74,0.2); }
+.exp-item:hover::before { background: var(--red); }
+.exp-item.current::before { background: var(--red); }
+
+.exp-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; flex-wrap: wrap; gap: 8px; }
+
+.exp-company {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--text);
+  letter-spacing: -0.3px;
+}
+.exp-company.current-co { color: var(--blue-light); }
+
+.exp-period {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  letter-spacing: 1px;
+  background: rgba(255,255,255,0.04);
+  padding: 3px 10px;
+}
+
+.exp-role {
+  font-size: 13px;
+  color: var(--red-light);
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.exp-current-badge {
+  display: inline-block;
+  background: var(--red-dim);
+  border: 1px solid var(--border-red);
+  color: var(--red-light);
+  font-size: 10px;
+  padding: 2px 8px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+.exp-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.exp-list li {
+  font-size: 14px;
+  color: var(--text-muted);
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.6;
+}
+.exp-list li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--red);
+  font-weight: 700;
+}
+
+/* SERVICES */
+.services { background: var(--navy2); border-top: 1px solid var(--border); }
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 3px;
+}
+
+.service-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  padding: 36px 32px;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+
+.service-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--red);
+  transform: scaleX(0);
+  transition: transform 0.3s;
+}
+.service-card:hover::after { transform: scaleX(1); }
+.service-card:hover { background: rgba(255,255,255,0.04); border-color: rgba(232,52,74,0.2); }
+
+.service-icon {
+  width: 44px; height: 44px;
+  background: var(--red-dim);
+  border: 1px solid var(--border-red);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.service-card h3 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 17px;
+  margin-bottom: 10px;
+  letter-spacing: -0.3px;
+}
+
+.service-card p { font-size: 13px; color: var(--text-muted); line-height: 1.8; }
+
+/* TESTIMONIALS */
+.testi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 3px;
+}
+
+.testi-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  padding: 36px;
+  transition: background 0.2s;
+  position: relative;
+}
+.testi-card:hover { background: rgba(255,255,255,0.04); }
+
+.testi-quote {
+  font-size: 60px;
+  color: rgba(232,52,74,0.2);
+  line-height: 0.8;
+  margin-bottom: 16px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+}
+
+.testi-text {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.8;
+  font-style: italic;
+  margin-bottom: 24px;
+}
+
+.testi-author { display: flex; align-items: center; gap: 12px; }
+.testi-avatar {
+  width: 40px; height: 40px;
+  background: var(--red-dim);
+  border: 1px solid var(--border-red);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--red-light);
+  flex-shrink: 0;
+}
+.testi-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; }
+.testi-meta { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+
+/* BLOG/TIPS */
+.blog { background: var(--navy2); border-top: 1px solid var(--border); }
+
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 3px;
+}
+
+.blog-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  padding: 32px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.blog-card:hover { background: rgba(255,255,255,0.04); border-color: rgba(232,52,74,0.2); transform: translateY(-2px); }
+
+.blog-tag {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--red-light);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.blog-card h3 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 10px;
+  letter-spacing: -0.3px;
+  line-height: 1.3;
+}
+
+.blog-card p { font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 16px; }
+.blog-read { font-size: 12px; color: var(--blue-light); font-family: 'Syne', sans-serif; font-weight: 600; }
+
+/* CONTACT */
+.contact-section { border-top: 1px solid var(--border); }
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+
+.contact-info { display: flex; flex-direction: column; gap: 3px; }
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  padding: 20px 24px;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.2s;
+}
+.contact-item:hover { border-color: var(--border-red); background: rgba(232,52,74,0.04); }
+
+.contact-icon {
+  width: 36px; height: 36px;
+  background: var(--red-dim);
+  border: 1px solid var(--border-red);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.contact-label { font-size: 11px; color: var(--text-dim); margin-bottom: 2px; text-transform: uppercase; letter-spacing: 1px; font-family: 'Syne', sans-serif; font-weight: 600; }
+.contact-value { font-size: 14px; color: var(--text); }
+
+.contact-form { display: flex; flex-direction: column; gap: 12px; }
+
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-label { font-size: 11px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; font-family: 'Syne', sans-serif; font-weight: 600; }
+
+.form-input, .form-textarea {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  padding: 12px 16px;
+  outline: none;
+  transition: border-color 0.2s;
+  resize: none;
+}
+.form-input:focus, .form-textarea:focus { border-color: var(--border-red); }
+.form-input::placeholder, .form-textarea::placeholder { color: var(--text-dim); }
+.form-textarea { height: 120px; }
+
+.form-submit {
+  background: var(--red);
+  color: #fff;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 14px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.3px;
+}
+.form-submit:hover { background: var(--red-light); }
+
+/* FOOTER */
+footer {
+  position: relative; z-index: 1;
+  border-top: 1px solid var(--border);
+  background: var(--navy2);
+  padding: 28px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer-logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--text-muted);
+}
+.footer-logo span { color: var(--red); }
+.footer-copy { font-size: 12px; color: var(--text-dim); }
+.footer-links { display: flex; gap: 20px; }
+.footer-links a { font-size: 12px; color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--red-light); }
+
+/* ANIMATIONS */
+@keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeLeft { from{opacity:0;transform:translate(24px,-50%)} to{opacity:1;transform:translate(0,-50%)} }
+
+.reveal { opacity:0; transform:translateY(28px); transition:opacity 0.7s ease,transform 0.7s ease; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav { padding:16px 24px; }
+  .nav-links { display:none; }
+  .hero { padding:100px 24px 60px; }
+  .hero-right { display:none; }
+  .about-grid, .contact-grid { grid-template-columns:1fr; gap:32px; }
+  .section-inner { padding:64px 24px; }
+  .langs-strip { padding:16px 24px; gap:20px; overflow-x:auto; }
+  footer { padding:20px 24px; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="chart-bg"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Umut<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="#hakkimda">Hakkımda</a></li>
+    <li><a href="#deneyim">Deneyim</a></li>
+    <li><a href="#hizmetler">Hizmetler</a></li>
+    <li><a href="#blog">Stratejiler</a></li>
+    <li><a href="#iletisim">İletişim</a></li>
+  </ul>
+  <a href="#iletisim" class="nav-cta">İletişime Geç</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-content">
+    <div class="hero-badge">IB Manager · Weltrade · Barcelona</div>
+    <h1>
+      <span class="name-red">Umut</span><br>
+      <span class="name-blue">Şimşek</span>
+    </h1>
+    <div class="hero-title">Business Development Manager · FX & Crypto</div>
+    <p>6+ yıllık finansal piyasalar deneyimiyle IBler için büyüme stratejileri geliştiriyor, topluluğu gelire dönüştürüyorum. Türkçe, İngilizce, İspanyolca ve Portekizce ile hizmet.</p>
+    <div class="hero-actions">
+      <a href="#iletisim" class="btn-primary">Benimle Çalış</a>
+      <a href="#deneyim" class="btn-outline">Deneyimim →</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="stat-strip">
+      <div class="stat-box">
+        <div class="stat-n">6+</div>
+        <div class="stat-l">Yıl Deneyim</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-n">20+</div>
+        <div class="stat-l">Kişilik Ekip Yönetimi</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-n">4</div>
+        <div class="stat-l">Dil · TR EN ES PT</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-n">150+</div>
+        <div class="stat-l">Ülke Erişimi</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LANGUAGES STRIP -->
+<div class="langs-strip">
+  <span class="langs-label">Diller</span>
+  <div class="lang-item">
+    <span class="lang-flag">🇹🇷</span>
+    <div><div class="lang-name">Türkçe</div><div class="lang-level">Anadil</div></div>
+  </div>
+  <div class="lang-item">
+    <span class="lang-flag">🇬🇧</span>
+    <div><div class="lang-name">İngilizce</div><div class="lang-level">Akıcı</div></div>
+  </div>
+  <div class="lang-item">
+    <span class="lang-flag">🇪🇸</span>
+    <div><div class="lang-name">İspanyolca</div><div class="lang-level">Akıcı</div></div>
+  </div>
+  <div class="lang-item">
+    <span class="lang-flag">🇧🇷</span>
+    <div><div class="lang-name">Portekizce</div><div class="lang-level">Akıcı</div></div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="hakkimda">
+  <div class="section-inner">
+    <div class="section-label">Hakkımda</div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <h2 class="section-title">Finans Dünyasında<br>Sonuç Üreten İsim</h2>
+        <p>Finansal hizmetler, satış ve müşteri deneyimi alanlarında <strong>6+ yıllık deneyime</strong> sahip, sonuç odaklı bir Business Development Manager'ım.</p>
+        <p>Weltrade'de IB Manager olarak çalışıyor; B2B partner portföyü geliştiriyor, bölgeye özel stratejiler uyguluyorum. Önceki rollerimde <strong>LATAM'da 20 kişilik ekip yönettim</strong>, müşteri elde tutma ve satış performansında üst düzey hedeflere ulaştım.</p>
+        <div class="about-highlight">
+          "Tek bir topluluk, doğru strateji ve gerçek destek ile büyük bir gelire dönüşebilir."
+        </div>
+        <p>MT4/MT5, CFD, kripto ve FX piyasalarında derin uzmanlığımı IBler için pratik büyüme stratejilerine dönüştürüyorum.</p>
+        <div style="margin-top:28px">
+          <div class="section-label" style="margin-bottom:12px">Uzmanlık Alanları</div>
+          <div class="skills-grid">
+            <span class="skill-tag">Foreign Exchange (FX)</span>
+            <span class="skill-tag">MT4 & MT5</span>
+            <span class="skill-tag">Cryptocurrency</span>
+            <span class="skill-tag">CRM Management</span>
+            <span class="skill-tag">Sales Strategy</span>
+            <span class="skill-tag">Customer Retention</span>
+            <span class="skill-tag">Risk Management</span>
+            <span class="skill-tag">Market Analysis</span>
+            <span class="skill-tag">Trading PR</span>
+            <span class="skill-tag">Blockchain</span>
+            <span class="skill-tag">Team Leadership</span>
+            <span class="skill-tag">B2B Partners</span>
+          </div>
+        </div>
+      </div>
+      <div class="about-info reveal">
+        <div class="info-card">
+          <h4>📍 Konum</h4>
+          <p>Barcelona, İspanya<br><span style="color:var(--text-dim);font-size:12px">Global & Remote çalışmaya açık</span></p>
+        </div>
+        <div class="info-card">
+          <h4>💼 Mevcut Rol</h4>
+          <p>Business Development Manager<br><span style="color:var(--blue-light)">Weltrade.com</span> · 2025 – Günümüz</p>
+        </div>
+        <div class="info-card">
+          <h4>🌍 Pazarlar</h4>
+          <p>LATAM · MENA · Türkiye · Avrupa<br><span style="color:var(--text-dim);font-size:12px">4 dil ile global erişim</span></p>
+        </div>
+        <div class="info-card">
+          <h4>🔗 Bağlantı</h4>
+          <p>
+            <a href="https://www.linkedin.com/in/umutsimsekk/" target="_blank" style="color:var(--blue-light);text-decoration:none;">LinkedIn Profili →</a><br>
+            <a href="https://github.com/MutuTeach/Mututeach" target="_blank" style="color:var(--text-muted);text-decoration:none;font-size:13px;">GitHub →</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="deneyim">
+  <div class="section-inner">
+    <div class="section-label">Deneyim</div>
+    <h2 class="section-title">Kariyer Yolculuğu</h2>
+    <p class="section-sub">Finansal hizmetlerden satışa, müşteri deneyiminden business development'a uzanan çizgi.</p>
+    <div class="exp-timeline reveal">
+
+      <div class="exp-item current">
+        <div class="exp-header">
+          <div>
+            <span class="exp-company current-co">Weltrade.com</span>
+            <span class="exp-current-badge">Mevcut</span>
+          </div>
+          <span class="exp-period">2025 — Günümüz</span>
+        </div>
+        <div class="exp-role">Business Development Manager</div>
+        <ul class="exp-list">
+          <li>B2B partner portföyü geliştirme, edinim, elde tutma ve stratejik ilişki yönetimi</li>
+          <li>Şirket ile partnerler arasında ana irtibat noktası olarak görev</li>
+          <li>Piyasa araştırması ve rakip analizi ile bölgeye özel stratejiler oluşturma</li>
+          <li>Promosyon aktiviteleri ve müşteri etkinliklerini planlama ve yürütme</li>
+          <li>Veri odaklı araçlar ile satış girişimlerini optimize etme</li>
+        </ul>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-header">
+          <span class="exp-company">TM Group</span>
+          <span class="exp-period">2022 — 2024</span>
+        </div>
+        <div class="exp-role">Team Lead, Retention LATAM</div>
+        <ul class="exp-list">
+          <li>İspanyolca ve Portekizce masalarında 20 kişilik ekip liderliği, müşteri elde tutma hedeflerini aşma</li>
+          <li>Bölgeye özel satış stratejileri ve ekip verimliliği için süreç iyileştirmeleri</li>
+          <li>Personeli gelişmiş satış, CRM ve MT4/MT5 platformlarında eğitme</li>
+          <li>Günlük piyasa güncellemeleri ve fiyatlandırma içgörüleri sunma</li>
+          <li>Kripto, blockchain ve FX piyasalarında derin uzmanlık edinme</li>
+        </ul>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-header">
+          <span class="exp-company">Lavixo</span>
+          <span class="exp-period">2020 — 2022</span>
+        </div>
+        <div class="exp-role">Retention Account Manager</div>
+        <ul class="exp-list">
+          <li>Müşteri ilişkileri ve CRM yönetimi, yatırım kararlarını destekleyecek piyasa içgörüleri sunma</li>
+          <li>Gelir ve P&L hedeflerinden sorumlu, proaktif iletişimle satış büyütme</li>
+          <li>MT4/MT5 platformları ve trading stratejileri konusunda müşteri danışmanlığı</li>
+          <li>CFD, kripto, FX piyasaları ve ilgili ürünlerde derin uzmanlık geliştirme</li>
+        </ul>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-header">
+          <span class="exp-company">Lavixo</span>
+          <span class="exp-period">2019 — 2020</span>
+        </div>
+        <div class="exp-role">Customer Experience / Support Executive</div>
+        <ul class="exp-list">
+          <li>Email, chat, telefon ve sosyal medyada yüksek hacimli müşteri sorularını yönetme</li>
+          <li>Kayıt, ödeme, trading (MT4/MT5) ve KYC süreçlerinde uzman rehberlik</li>
+          <li>Güvenlik en iyi uygulamaları konusunda küresel müşteri eğitimi</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="hizmetler">
+  <div class="section-inner">
+    <div class="section-label">Hizmetler</div>
+    <h2 class="section-title">Ne Sunuyorum?</h2>
+    <p class="section-sub">IBler ve partnerler için somut sonuçlar üreten hizmetler.</p>
+    <div class="services-grid reveal">
+      <div class="service-card">
+        <div class="service-icon">📈</div>
+        <h3>IB Büyüme Stratejisi</h3>
+        <p>Topluluğunuzu aktif trader tabanına dönüştürmek için kişiselleştirilmiş strateji geliştirme. FTD artışı ve net depozit optimizasyonu.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🤝</div>
+        <h3>B2B Partner Geliştirme</h3>
+        <p>Yeni IB partner edinimi, mevcut partner aktivasyonu ve uzun vadeli ilişki yönetimi ile sürdürülebilir büyüme.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🌎</div>
+        <h3>LATAM & MENA Pazarları</h3>
+        <p>İspanyolca, Portekizce ve Türkçe ile bölgeye özel stratejiler. LATAM ve MENA pazarlarında derin ağ ve deneyim.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📊</div>
+        <h3>Trading Eğitimi & Koçluk</h3>
+        <p>MT4/MT5, FX, kripto ve CFD piyasaları üzerine trader eğitimi. Topluluğunuza değer katacak içerik ve koçluk programları.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">💡</div>
+        <h3>İçerik & Pazarlama Danışmanlığı</h3>
+        <p>IBler için sosyal medya stratejisi, hazır içerik şablonları ve topluluğu büyütme planı. Telegram, Instagram, YouTube optimizasyonu.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🔄</div>
+        <h3>Müşteri Elde Tutma Sistemi</h3>
+        <p>Kayıpları önleme, hareketsiz müşterileri aktifleştirme ve uzun vadeli sadakat oluşturma için sistematik retention stratejileri.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOG / STRATEGIES -->
+<section class="blog" id="blog">
+  <div class="section-inner">
+    <div class="section-label">IB Stratejileri</div>
+    <h2 class="section-title">Kazandıran Fikirler</h2>
+    <p class="section-sub">IB olarak daha fazla FTD, daha fazla aktif trader ve daha yüksek net depozit için kanıtlanmış stratejiler.</p>
+    <div class="blog-grid reveal">
+      <div class="blog-card">
+        <span class="blog-tag">İçerik Stratejisi</span>
+        <h3>Eğitici Ol, Sat Değil — FTD'yi 3x Artırma Yöntemi</h3>
+        <p>Topluluğuna doğrudan satış yapmak yerine haftalık eğitim içerikleri paylaşan IBler, ortalama 3 kat daha fazla FTD elde ediyor.</p>
+        <div class="blog-read">Stratejiyi oku →</div>
+      </div>
+      <div class="blog-card">
+        <span class="blog-tag">Topluluk Yönetimi</span>
+        <h3>500 Üyeli Telegram Grubu ile Aylık 40+ FTD Nasıl Alınır?</h3>
+        <p>Telegram grubunu sinyal kanalından eğitim merkezine dönüştürmenin adım adım yöntemi. Günlük içerik takvimi dahil.</p>
+        <div class="blog-read">Stratejiyi oku →</div>
+      </div>
+      <div class="blog-card">
+        <span class="blog-tag">Dönüşüm</span>
+        <h3>Kayıtlı Ama Yatırım Yapmayan Kişilere Ne Diyeceksin?</h3>
+        <p>Kişisel mesaj göndermenin otomatik emailden 8 kat daha etkili olduğu kanıtlandı. İşte kelimesi kelimesine kullanabileceğin script.</p>
+        <div class="blog-read">Scripti gör →</div>
+      </div>
+      <div class="blog-card">
+        <span class="blog-tag">Alt-IB Sistemi</span>
+        <h3>Alt-IB Ağı Kurarak Gelirini 5x Katla</h3>
+        <p>Kendi topluluğundaki aktif trader'ları IB olarak eğit. Onların kazancından pay al. Sistem senin yerine çalışsın.</p>
+        <div class="blog-read">Modeli incele →</div>
+      </div>
+      <div class="blog-card">
+        <span class="blog-tag">Gamification</span>
+        <h3>30 Günlük Trading Yarışması ile Grup Enerjisini Kullan</h3>
+        <p>Topluluğunda aylık challenge düzenle, birden fazla FTD'yi tek kampanyayla al. Sponsor ödül = broker katkısı.</p>
+        <div class="blog-read">Kampanyayı kur →</div>
+      </div>
+      <div class="blog-card">
+        <span class="blog-tag">Retention</span>
+        <h3>Hareketsiz Trader'ı Geri Kazanmanın Formülü</h3>
+        <p>30+ gün işlem yapmayan müşteri = kaybedilen komisyon. İşte onları 48 saat içinde aktifleştiren mesaj sırası.</p>
+        <div class="blog-read">Formülü uygula →</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="referanslar">
+  <div class="section-inner">
+    <div class="section-label">Referanslar</div>
+    <h2 class="section-title">Partnerlerim Ne Diyor?</h2>
+    <p class="section-sub">Birlikte çalıştığımız IBler ve partner'lardan gerçek görüşler.</p>
+    <div class="testi-grid reveal">
+      <div class="testi-card">
+        <div class="testi-quote">"</div>
+        <p class="testi-text">Umut'un stratejileri sayesinde ilk ay 28 FTD aldım. Daha önce hiç bu kadar hızlı büyümemiştim. Kişisel ilgisi ve pratik desteği fark yarattı.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">AK</div>
+          <div>
+            <div class="testi-name">Ahmet K.</div>
+            <div class="testi-meta">Telegram IB · İstanbul</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-quote">"</div>
+        <p class="testi-text">Instagram'da sadece link paylaşıyordum. Umut'un içerik stratejisini uyguladıktan sonra 3 ay içinde 180 aktif trader'a ulaştım. Gerçekten işe yarıyor.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">SE</div>
+          <div>
+            <div class="testi-name">Selin E.</div>
+            <div class="testi-meta">Instagram IB · Ankara</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-quote">"</div>
+        <p class="testi-text">LATAM pazarında çalışıyorum ve Umut'un hem İspanyolca hem de piyasa bilgisi sayesinde çok daha güçlü bir partner ağı kurdum. Çok dilli desteği paha biçilmez.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">CR</div>
+          <div>
+            <div class="testi-name">Carlos R.</div>
+            <div class="testi-meta">IB Partner · Meksika</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="iletisim">
+  <div class="section-inner">
+    <div class="section-label">İletişim</div>
+    <h2 class="section-title">Konuşalım</h2>
+    <p class="section-sub">IB olmak, büyüme stratejisi ya da iş birliği için bana ulaş.</p>
+    <div class="contact-grid reveal">
+      <div class="contact-info">
+        <a href="tel:+34610732053" class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div>
+            <div class="contact-label">Telefon</div>
+            <div class="contact-value">+34 610 732 053</div>
+          </div>
+        </a>
+        <a href="mailto:simsekk.umut@gmail.com" class="contact-item">
+          <div class="contact-icon">✉️</div>
+          <div>
+            <div class="contact-label">E-posta</div>
+            <div class="contact-value">simsekk.umut@gmail.com</div>
+          </div>
+        </a>
+        <a href="https://www.linkedin.com/in/umutsimsekk/" target="_blank" class="contact-item">
+          <div class="contact-icon">💼</div>
+          <div>
+            <div class="contact-label">LinkedIn</div>
+            <div class="contact-value">linkedin.com/in/umutsimsekk</div>
+          </div>
+        </a>
+        <div class="contact-item" style="cursor:default">
+          <div class="contact-icon">📍</div>
+          <div>
+            <div class="contact-label">Konum</div>
+            <div class="contact-value">Barcelona, İspanya</div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form">
+        <div class="form-group">
+          <label class="form-label">Adın</label>
+          <input type="text" class="form-input" placeholder="Adın Soyadın" id="f-name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">E-posta</label>
+          <input type="email" class="form-input" placeholder="email@example.com" id="f-email">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Konu</label>
+          <input type="text" class="form-input" placeholder="IB olmak istiyorum / İş birliği / Diğer" id="f-subject">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mesajın</label>
+          <textarea class="form-textarea" placeholder="Mesajını buraya yaz..." id="f-message"></textarea>
+        </div>
+        <button class="form-submit" id="f-submit">Mesaj Gönder →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Umut<span>Şimşek</span></div>
+  <div class="footer-copy">© 2025 Umut Şimşek. Tüm hakları saklıdır.</div>
+  <div class="footer-links">
+    <a href="https://www.linkedin.com/in/umutsimsekk/" target="_blank">LinkedIn</a>
+    <a href="https://github.com/MutuTeach/Mututeach" target="_blank">GitHub</a>
+    <a href="mailto:simsekk.umut@gmail.com">E-posta</a>
+  </div>
+</footer>
+
+<script>
+/* TRADING CHART BACKGROUND */
+const canvas = document.getElementById('chart-bg');
+const ctx = canvas.getContext('2d');
+let W, H, points = [], frame = 0;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  generateChart();
+}
+
+function generateChart() {
+  points = [];
+  const segments = 120;
+  let y = H * 0.55;
+  for (let i = 0; i <= segments; i++) {
+    const trend = -0.3;
+    const noise = (Math.random() - 0.48) * 28;
+    const spike = Math.random() < 0.05 ? (Math.random() - 0.5) * 60 : 0;
+    y += trend + noise + spike;
+    y = Math.max(H * 0.2, Math.min(H * 0.85, y));
+    points.push({ x: (i / segments) * W, y });
+  }
+}
+
+function drawChart() {
+  ctx.clearRect(0, 0, W, H);
+  frame++;
+
+  /* grid lines */
+  ctx.strokeStyle = 'rgba(31,111,235,0.08)';
+  ctx.lineWidth = 0.5;
+  for (let i = 0; i < 10; i++) {
+    const y = (i / 10) * H;
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+  for (let i = 0; i < 20; i++) {
+    const x = (i / 20) * W;
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  }
+
+  if (points.length < 2) return;
+
+  /* candlestick-style bars */
+  const barW = W / points.length * 0.6;
+  for (let i = 1; i < points.length; i++) {
+    const x = points[i].x;
+    const open = points[i - 1].y;
+    const close = points[i].y;
+    const isBull = close < open;
+    const high = Math.min(open, close) - Math.random() * 12;
+    const low = Math.max(open, close) + Math.random() * 12;
+    ctx.strokeStyle = isBull ? 'rgba(88,166,255,0.5)' : 'rgba(232,52,74,0.5)';
+    ctx.lineWidth = 0.8;
+    ctx.beginPath();
+    ctx.moveTo(x, high); ctx.lineTo(x, low);
+    ctx.stroke();
+    ctx.fillStyle = isBull ? 'rgba(88,166,255,0.25)' : 'rgba(232,52,74,0.25)';
+    ctx.fillRect(x - barW / 2, Math.min(open, close), barW, Math.abs(close - open) || 1);
+  }
+
+  /* main line */
+  ctx.beginPath();
+  ctx.moveTo(points[0].x, points[0].y);
+  for (let i = 1; i < points.length; i++) {
+    const cp = { x: (points[i - 1].x + points[i].x) / 2, y: (points[i - 1].y + points[i].y) / 2 };
+    ctx.quadraticCurveTo(points[i - 1].x, points[i - 1].y, cp.x, cp.y);
+  }
+  ctx.strokeStyle = 'rgba(88,166,255,0.6)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  /* moving average line */
+  const maWindow = 8;
+  ctx.beginPath();
+  for (let i = maWindow; i < points.length; i++) {
+    const avg = points.slice(i - maWindow, i).reduce((s, p) => s + p.y, 0) / maWindow;
+    if (i === maWindow) ctx.moveTo(points[i].x, avg);
+    else ctx.lineTo(points[i].x, avg);
+  }
+  ctx.strokeStyle = 'rgba(240,165,0,0.4)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 4]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  /* animated ticker dot */
+  const last = points[points.length - 1];
+  const pulse = Math.sin(frame * 0.06) * 0.5 + 0.5;
+  ctx.beginPath();
+  ctx.arc(last.x, last.y, 5 + pulse * 3, 0, Math.PI * 2);
+  ctx.fillStyle = `rgba(232,52,74,${0.3 + pulse * 0.3})`;
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(last.x, last.y, 3, 0, Math.PI * 2);
+  ctx.fillStyle = '#E8344A';
+  ctx.fill();
+}
+
+/* slowly scroll the chart */
+let scrollOffset = 0;
+function animate() {
+  scrollOffset += 0.3;
+  if (scrollOffset > W / points.length) {
+    scrollOffset = 0;
+    points.shift();
+    const last = points[points.length - 1];
+    const newY = last.y + (Math.random() - 0.49) * 22;
+    points.push({ x: last.x + W / 120, y: Math.max(H * 0.2, Math.min(H * 0.85, newY)) });
+    points.forEach((p, i) => p.x = (i / points.length) * W);
+  }
+  drawChart();
+  requestAnimationFrame(animate);
+}
+
+window.addEventListener('resize', resize);
+resize();
+animate();
+
+/* SCROLL REVEAL */
+const revealEls = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      const children = e.target.children;
+      Array.from(children).forEach((c, j) => {
+        c.style.transitionDelay = j * 0.07 + 's';
+      });
+      setTimeout(() => e.target.classList.add('visible'), 50);
+    }
+  });
+}, { threshold: 0.1 });
+revealEls.forEach(el => obs.observe(el));
+
+/* CONTACT FORM */
+document.getElementById('f-submit').addEventListener('click', () => {
+  const name = document.getElementById('f-name').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const msg = document.getElementById('f-message').value.trim();
+  if (name && email && msg) {
+    const mailto = `mailto:simsekk.umut@gmail.com?subject=Web Sitesi - ${encodeURIComponent(document.getElementById('f-subject').value || 'İletişim')}&body=${encodeURIComponent('Ad: ' + name + '\nEmail: ' + email + '\n\n' + msg)}`;
+    window.location.href = mailto;
+  } else {
+    document.getElementById('f-submit').textContent = 'Lütfen tüm alanları doldur!';
+    setTimeout(() => document.getElementById('f-submit').textContent = 'Mesaj Gönder →', 2000);
+  }
+});
+</script>
+</body>
+</html>
